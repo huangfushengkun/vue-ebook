@@ -1,18 +1,27 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <div id="read"></div> -->
+    <span class="icon-bookmark"></span>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+// import Epub from 'epubjs'
+// global.ePub = Epub
 export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
+  // name: 'home',
+  // mounted () {
+  //   this.book = new Epub('/2017_Book_IntelligentHumanComputerIntera.epub')
+  //   this.book.renderTo('read', {
+  //     width: window.innerWidth,
+  //     height: window.innerHeight
+  //   }).display()
+  // }
 }
 </script>
+
+<style scoped>
+  .icon-bookmark {
+    color: red;
+  }
+</style>
