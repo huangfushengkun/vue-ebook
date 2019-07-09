@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapActions } from 'vuex'
+import { ebookMixin } from '../../utils/mixin'
 import Epub from 'epubjs'
 global.ePub = Epub
 export default {
@@ -16,10 +17,24 @@ export default {
     return {
     }
   },
-  computed: {
-    ...mapGetters(['fileName'])
-  },
+  mixins: [ebookMixin],
   methods: {
+    prevPage () {
+      this.rendition && this.rendition.prev()
+      this.hideTitleAndMenu()
+    },
+    nextPage () {
+      this.rendition && this.rendition.next()
+      this.hideTitleAndMenu()
+    },
+    toggleTitleAndMenu () {
+      // this.$store.dispatch('setMenuVisible', !this.menuVisible)
+      this.setMenuVisible(!this.menuVisible)
+    },
+    hideTitleAndMenu () {
+      // this.$store.dispatch('setMenuVisible', false)
+      this.setMenuVisible(false)
+    },
     initEpub () {
       const url = 'http://47.101.198.221:8080/epub/' + this.fileName + '.epub'
       // console.log(url)
@@ -29,19 +44,29 @@ export default {
         height: innerHeight,
         method: 'default'
       })
-        // console.log(this.rendition)
       this.rendition.display()
       this.rendition.on('touchstart', (event) => {
-        // console.log(event)
+        this.touchStartX = event.changedTouches[0].clientX
+        this.touchStartTime = event.timeStamp
       })
       this.rendition.on('touchend', event => {
-        // console.log(event)
+        const offsetX = event.changedTouches[0].clientX - this.touchStartX
+        const time = event.timeStamp - this.touchStartTime
+        if (time < 500 && offsetX > 40) {
+          this.prevPage()
+        } else if (time < 500 && offsetX < -40) {
+          this.nextPage()
+        } else {
+          this.toggleTitleAndMenu()
+        }
+        event.preventDefault()
+        event.stopPropagation()
       })
     }
   },
   mounted () {
     const fileName = this.$route.params.fileName.split('|').join('/')
-    this.$store.dispatch('setFileName', fileName).then(() => {
+    this.setFileName(fileName).then(() => {
       this.initEpub()
     })
   }
@@ -49,5 +74,11 @@ export default {
 
 </script>
 <style lang='scss' rel='stylesheet/scss' scoped>
-@import '../../assets/styles/global.scss'
+  @import '../../assets/styles/global.scss';
+  iframe {
+    body {
+      padding-left: 0!important;
+    }
+  }
+  
 </style>
