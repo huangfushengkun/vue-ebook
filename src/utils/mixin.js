@@ -12,6 +12,6 @@ export const ebookMixin = {
         ...mapActions([
             'setMenuVisible',
             'setFileName'
-        ]),
+        ])
     }
 }

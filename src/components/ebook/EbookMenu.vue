@@ -26,11 +26,11 @@ import { ebookMixin } from '../../utils/mixin'
 export default {
   data () {
     return {
-    };
+    }
   },
   mixins: [ebookMixin],
   methods: {
-    showSetting(key) {
+    showSetting (key) {
 
     }
   }
