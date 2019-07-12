@@ -18,20 +18,28 @@
         </div>
       </div>
     </transition>
+    <ebook-setting-font></ebook-setting-font>
+    <ebook-setting-font-popuo></ebook-setting-font-popuo>
   </div>
 </template>
 
 <script>
-import { ebookMixin } from '../../utils/mixin'
+import EbookSettingFontPopuo from './EbookSettingFontPopup.vue'
+import EbookSettingFont from './EbookSettingFont.vue'
+import { ebookMixin } from '../../utils/mixin.js'
 export default {
   data () {
     return {
     }
   },
   mixins: [ebookMixin],
+  components: {
+    EbookSettingFont,
+    EbookSettingFontPopuo
+  },
   methods: {
     showSetting (key) {
-
+      this.setSettingVisible(key)
     }
   }
 }
@@ -40,6 +48,7 @@ export default {
 <style lang='scss' rel='stylesheet/scss' scoped>
   @import '../../assets/styles/global.scss';
   .menu-wrapper {
+    background-color: #fff;
     position: absolute;
     bottom: 0;
     left: 0;

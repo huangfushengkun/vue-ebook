@@ -28,17 +28,20 @@ export default {
       this.hideTitleAndMenu()
     },
     toggleTitleAndMenu () {
+      this.menuVisible && this.setSettingVisible(-1)
       // this.$store.dispatch('setMenuVisible', !this.menuVisible)
       this.setMenuVisible(!this.menuVisible)
     },
     hideTitleAndMenu () {
       // this.$store.dispatch('setMenuVisible', false)
       this.setMenuVisible(false)
+      this.setSettingVisible(-1)
     },
     initEpub () {
       const url = 'http://47.101.198.221:8080/epub/' + this.fileName + '.epub'
       // console.log(url)
       this.book = new Epub(url)
+      this.setCurrentBook(this.book)
       this.rendition = this.book.renderTo('read', {
         width: innerWidth,
         height: innerHeight,

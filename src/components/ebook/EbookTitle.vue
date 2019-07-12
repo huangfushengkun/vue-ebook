@@ -51,9 +51,6 @@ export default {
   .left {
     flex: 0 0 px2rem(37);
     @include center;
-    .icon-back {
-      margin-left: px2rem(15);
-    }
   }
   .right {
     flex: 1;
