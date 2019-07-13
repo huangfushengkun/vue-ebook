@@ -11,6 +11,7 @@
 // import { mapActions } from 'vuex'
 import { ebookMixin } from '../../utils/mixin'
 import Epub from 'epubjs'
+import { Promise } from 'q';
 global.ePub = Epub
 export default {
   data () {
@@ -31,14 +32,17 @@ export default {
       this.menuVisible && this.setSettingVisible(-1)
       // this.$store.dispatch('setMenuVisible', !this.menuVisible)
       this.setMenuVisible(!this.menuVisible)
+      this.setFontFamilyVisible(false)
+
     },
     hideTitleAndMenu () {
       // this.$store.dispatch('setMenuVisible', false)
       this.setMenuVisible(false)
       this.setSettingVisible(-1)
+      this.setFontFamilyVisible(false)
     },
     initEpub () {
-      const url = 'http://47.101.198.221:8080/epub/' + this.fileName + '.epub'
+      const url = 'http://huangfushengkun.online:8080/epub/' + this.fileName + '.epub'
       // console.log(url)
       this.book = new Epub(url)
       this.setCurrentBook(this.book)
@@ -64,6 +68,16 @@ export default {
         }
         event.preventDefault()
         event.stopPropagation()
+      })
+
+      this.rendition.hooks.content.register(contents => {
+        Promise.all([
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/cabin.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/montserrat.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`)
+          ]).then (() => {})
+        
       })
     }
   },
