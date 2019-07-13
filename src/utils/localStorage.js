@@ -1,2 +1,4 @@
 import Storage from 'web-storage-cache'
-conat localStorage = new Storage()
+conat localStorage = new Storage(key, value) {
+    
+}
