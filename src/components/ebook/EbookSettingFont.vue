@@ -22,7 +22,7 @@
           <span :style="styleRight" ref="rightText">A</span>
         </div>
       </div>
-      <div class="setting-font-family" @click.stop="showFontFamilySetting">
+      <div class="setting-font-family" @click.stop="showFontFamilySetting()">
         <div class="setting-font-family-text-wrapper">
           <span class="setting-font-family-text">{{defaultFontFamily}}</span>
         </div>
@@ -52,6 +52,7 @@ export default {
       this.currentBook.rendition.themes.fontSize(fontSize)
     },
     showFontFamilySetting () {
+      console.log(111)
       this.setFontFamilyVisible(true)
     }
   }

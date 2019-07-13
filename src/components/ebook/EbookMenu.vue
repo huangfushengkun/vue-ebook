@@ -3,7 +3,7 @@
   <div class="meu-bar">
     <transition name="slide-up">
       <div class="menu-wrapper" :class="{'hide-box-shadow': settingVisible >= 0 || !menuVisible}"
-           v-show="menuVisible">
+          v-show="menuVisible">
         <div class="icon-wrapper" :class="{'selected': settingVisible === 3}">
           <span class="icon-menu" @click="showSetting(3)"></span>
         </div>

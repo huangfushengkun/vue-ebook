@@ -18,7 +18,7 @@ const book = {
     paginate: '',
     pagelist: null,
     offsetY: 0,
-    isBookmark: null,
+    isBookmark: null
     // speakingIconBottom: realPx(58)
   },
   mutations: {

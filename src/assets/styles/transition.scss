@@ -98,10 +98,10 @@ $homeAnimationTime: .2s;
     opacity: 0;
 }
 
-.popup-slide-up-enter,
-.popup-slide-up-leave-to {
-    transform: translate3d(0, 100%, 0);
-}
+// .popup-slide-up-enter,
+// .popup-slide-up-leave-to {
+//     transform: translate3d(0, 100%, 0);
+// }
 
 .opacity-slide-up-enter,
 .opacity-slide-up-leave-to {
