@@ -11,7 +11,7 @@
     <div class="ebook-popup-list-wrapper">
       <div class="ebook-popup-item" 
         v-for="(item,index) in fontFamilyList" 
-        :key="index" @click="setFintFamily(item.font)">
+        :key="index" @click="setFontFamily(item.font)">
         <div class="ebook-popup-item-text" 
           :class="{'selected':isSelected(item)}"
           >{{item.font}}</div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { setLocalStorage, getLocalStorage, removeLocalStorage, clearLocalStorage} from '../../utils/localStorage.js'
+import { setLocalStorage, getLocalStorage, removeLocalStorage, clearLocalStorage, saveFontFamily} from '../../utils/localStorage.js'
 import { FONT_FAMILY } from '../../utils/book.js'
 import { ebookMixin }  from '../../utils/mixin.js'
 export default {
@@ -43,8 +43,9 @@ export default {
       hide () {
         this.setFontFamilyVisible(false)
       },
-      setFintFamily (font) {
+      setFontFamily (font) {
         this.setDefaultFontFamily(font)
+        saveFontFamily(this.fileName, font)
         if(font === 'Default') {
           font ='Times New Roman'
         }
@@ -52,7 +53,7 @@ export default {
       }
   },
   mounted () {
-    setLocalStorage (this.fileName, this.defaultFontFamily)
+    // setLocalStorage (this.fileName, this.defaultFontFamily)
     // console.log(getLocalStorage(this.fileName))
     // removeLocalStorage(this.fileName)
     // clearLocalStorage()

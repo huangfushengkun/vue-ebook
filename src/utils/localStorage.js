@@ -35,7 +35,7 @@ export function getBookObject(fileName, key) {
     }
 }
 
-export function getFontFamily() {
+export function getFontFamily(fileName) {
     return getBookObject(fileName, 'fontFamily')
 }
 

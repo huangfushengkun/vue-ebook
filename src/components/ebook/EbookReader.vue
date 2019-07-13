@@ -11,7 +11,8 @@
 // import { mapActions } from 'vuex'
 import { ebookMixin } from '../../utils/mixin'
 import Epub from 'epubjs'
-import { Promise } from 'q';
+import { Promise } from 'q'
+import { getFontFamily, saveFontFamily } from '../../utils/localStorage'
 global.ePub = Epub
 export default {
   data () {
@@ -51,7 +52,15 @@ export default {
         height: innerHeight,
         method: 'default'
       })
-      this.rendition.display()
+      this.rendition.display().then(() => {
+        let font = getFontFamily(this.fileName)
+        if (!font) {
+          saveFontFamily(this.fileName, this.defaultFontFamily)
+        } else {
+          this.rendition.themes.font(font)
+          this.setDefaultFontFamily(font)
+        }
+      })
       this.rendition.on('touchstart', (event) => {
         this.touchStartX = event.changedTouches[0].clientX
         this.touchStartTime = event.timeStamp
