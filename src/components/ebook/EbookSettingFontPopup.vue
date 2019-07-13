@@ -9,13 +9,13 @@
         <span class="ebook-popup-title-text">选择字体</span>
     </div>
     <div class="ebook-popup-list-wrapper">
-      <div class="ebook-popup-item" 
-        v-for="(item,index) in fontFamilyList" 
+      <div class="ebook-popup-item"
+        v-for="(item,index) in fontFamilyList"
         :key="index" @click="setFontFamily(item.font)">
-        <div class="ebook-popup-item-text" 
+        <div class="ebook-popup-item-text"
           :class="{'selected':isSelected(item)}"
           >{{item.font}}</div>
-        <div class="ebook-popup-item-check" 
+        <div class="ebook-popup-item-check"
           v-if="isSelected(item)">
           <span class="icon-check"></span>
         </div>
@@ -26,9 +26,9 @@
 </template>
 
 <script>
-import { setLocalStorage, getLocalStorage, removeLocalStorage, clearLocalStorage, saveFontFamily} from '../../utils/localStorage.js'
+import { saveFontFamily } from '../../utils/localStorage.js'
 import { FONT_FAMILY } from '../../utils/book.js'
-import { ebookMixin }  from '../../utils/mixin.js'
+import { ebookMixin } from '../../utils/mixin.js'
 export default {
   mixins: [ebookMixin],
   data () {
@@ -46,17 +46,13 @@ export default {
       setFontFamily (font) {
         this.setDefaultFontFamily(font)
         saveFontFamily(this.fileName, font)
-        if(font === 'Default') {
-          font ='Times New Roman'
+        if (font === 'Default') {
+          font = 'Times New Roman'
         }
         this.currentBook.rendition.themes.font(font)
       }
   },
   mounted () {
-    // setLocalStorage (this.fileName, this.defaultFontFamily)
-    // console.log(getLocalStorage(this.fileName))
-    // removeLocalStorage(this.fileName)
-    // clearLocalStorage()
   }
 }
 
