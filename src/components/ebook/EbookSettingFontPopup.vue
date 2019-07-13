@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { setLocalStorage, getLocalStorage, removeLocalStorage, clearLocalStorage} from '../../utils/localStorage.js'
 import { FONT_FAMILY } from '../../utils/book.js'
 import { ebookMixin }  from '../../utils/mixin.js'
 export default {
@@ -49,6 +50,12 @@ export default {
         }
         this.currentBook.rendition.themes.font(font)
       }
+  },
+  mounted () {
+    setLocalStorage (this.fileName, this.defaultFontFamily)
+    // console.log(getLocalStorage(this.fileName))
+    // removeLocalStorage(this.fileName)
+    // clearLocalStorage()
   }
 }
 
