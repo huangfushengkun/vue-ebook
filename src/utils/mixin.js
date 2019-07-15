@@ -2,6 +2,8 @@ import {
   mapGetters,
   mapActions
 } from 'vuex'
+import { themeList, removeAllCss } from './book'
+import { addCss } from './untils'
 
 export const ebookMixin = {
   computed: {
@@ -26,7 +28,10 @@ export const ebookMixin = {
       'offsetY',
       'isBookmark',
       'speakingIconBottom'
-    ])
+    ]),
+    themeList () {
+      return themeList(this)
+    }
   },
   methods: {
     ...mapActions([
@@ -50,6 +55,26 @@ export const ebookMixin = {
       'setOffsetY',
       'setIsBookmark',
       'setSpeakingIconBottom'
-    ])
+    ]),
+    /* 初始化全局样式 */
+    initGlobalStyle () {
+      removeAllCss()
+      switch (this.defaultTheme) {
+        case 'Default':
+          addCss(`${process.env.VUE_APP_RES_URL}/theme/theme_default.css`)
+          break
+        case 'Eye':
+          addCss(`${process.env.VUE_APP_RES_URL}/theme/theme_eye.css`)
+          break
+        case 'Gold':
+          addCss(`${process.env.VUE_APP_RES_URL}/theme/theme_gold.css`)
+          break
+        case 'Night':
+          addCss(`${process.env.VUE_APP_RES_URL}/theme/theme_night.css`)
+          break
+        default:
+          addCss(`${process.env.VUE_APP_RES_URL}/theme/theme_default.css`)
+      }
+    }
   }
 }

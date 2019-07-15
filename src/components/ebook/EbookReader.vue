@@ -1,9 +1,7 @@
 <!--  -->
 <template>
   <div class="ebook-reader">
-    <div id="read">
-
-    </div>
+    <div id="read"></div>
   </div>
 </template>
 
@@ -12,12 +10,18 @@
 import { ebookMixin } from '../../utils/mixin'
 import Epub from 'epubjs'
 import { Promise } from 'q'
-import { getFontFamily, saveFontFamily, getFontSize, saveFontSize } from '../../utils/localStorage'
+import {
+  getFontFamily,
+  saveFontFamily,
+  getFontSize,
+  saveFontSize,
+  getTheme,
+  saveTheme
+} from '../../utils/localStorage'
 global.ePub = Epub
 export default {
   data () {
-    return {
-    }
+    return {}
   },
   mixins: [ebookMixin],
   methods: {
@@ -29,18 +33,21 @@ export default {
       this.rendition && this.rendition.next()
       this.hideTitleAndMenu()
     },
+    /* 切换头部和菜单 */
     toggleTitleAndMenu () {
       this.menuVisible && this.setSettingVisible(-1)
       // this.$store.dispatch('setMenuVisible', !this.menuVisible)
       this.setMenuVisible(!this.menuVisible)
       this.setFontFamilyVisible(false)
     },
+    /* 隐藏头部和菜单 */
     hideTitleAndMenu () {
       // this.$store.dispatch('setMenuVisible', false)
       this.setMenuVisible(false)
       this.setSettingVisible(-1)
       this.setFontFamilyVisible(false)
     },
+    /* 字号初始化 */
     initFontSize () {
       let fontSize = getFontSize(this.fileName)
       if (!fontSize) {
@@ -50,6 +57,7 @@ export default {
         this.setDefaultFontSize(fontSize)
       }
     },
+    /* 字体初始化 */
     initFontFamily () {
       let font = getFontFamily(this.fileName)
       if (!font) {
@@ -59,9 +67,23 @@ export default {
         this.setDefaultFontFamily(font)
       }
     },
+    initTheme () {
+      /* 主题初始化 */
+      let defaultTheme = getTheme(this.fileName)
+      if (!defaultTheme) {
+        defaultTheme = this.themeList[0].name
+        saveTheme(this.fileName, defaultTheme)
+      }
+      this.themeList.forEach(theme => {
+        this.rendition.themes.register(theme.name, theme.style)
+      })
+      /* 选择默认样式 */
+      this.setDefaultTheme(defaultTheme)
+      this.rendition.themes.select(defaultTheme)
+    },
     initEpub () {
-      const url = 'http://huangfushengkun.online:8080/epub/' + this.fileName + '.epub'
-      // console.log(url)
+      const url =
+        `${process.env.VUE_APP_RES_URL}/epub/` + this.fileName + '.epub'
       this.book = new Epub(url)
       this.setCurrentBook(this.book)
       this.rendition = this.book.renderTo('read', {
@@ -70,10 +92,12 @@ export default {
         method: 'default'
       })
       this.rendition.display().then(() => {
+        this.initTheme()
         this.initFontSize()
         this.initFontFamily()
+        this.initGlobalStyle()
       })
-      this.rendition.on('touchstart', (event) => {
+      this.rendition.on('touchstart', event => {
         this.touchStartX = event.changedTouches[0].clientX
         this.touchStartTime = event.timeStamp
       })
@@ -93,12 +117,20 @@ export default {
 
       this.rendition.hooks.content.register(contents => {
         Promise.all([
-            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`),
-            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/cabin.css`),
-            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/montserrat.css`),
-            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`)
-          ])
-          // .then (() => {})
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`
+          ),
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}/fonts/cabin.css`
+          ),
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}/fonts/montserrat.css`
+          ),
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`
+          )
+        ])
+        // .then (() => {})
       })
     }
   },
@@ -109,13 +141,12 @@ export default {
     })
   }
 }
-
 </script>
 <style lang='scss' rel='stylesheet/scss' scoped>
-  @import '../../assets/styles/global.scss';
-  iframe {
-    body {
-      padding-left: 0!important;
-    }
+@import "../../assets/styles/global.scss";
+iframe {
+  body {
+    padding-left: 0 !important;
   }
+}
 </style>
