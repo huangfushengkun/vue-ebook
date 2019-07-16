@@ -21,6 +21,7 @@
     <ebook-setting-font></ebook-setting-font>
     <ebook-setting-font-popuo></ebook-setting-font-popuo>
     <ebook-setting-theme></ebook-setting-theme>
+    <ebook-setting-progress></ebook-setting-progress>
   </div>
 </template>
 
@@ -28,6 +29,7 @@
 import EbookSettingFontPopuo from './EbookSettingFontPopup.vue'
 import EbookSettingFont from './EbookSettingFont.vue'
 import EbookSettingTheme from './EbookSettingTheme.vue'
+import EbookSettingProgress from './EbookSettingProgress'
 import { ebookMixin } from '../../utils/mixin.js'
 export default {
   data () {
@@ -38,7 +40,8 @@ export default {
   components: {
     EbookSettingFont,
     EbookSettingFontPopuo,
-    EbookSettingTheme
+    EbookSettingTheme,
+    EbookSettingProgress
   },
   methods: {
     showSetting (key) {

@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="text-wrapper">
-          <span class="progress-section-text">{{getSectionName}}</span>
+          <!-- <span class="progress-section-text">{{getSectionName}}</span> -->
           <span class="progress-text">({{bookAvailable ? progress + '%' : $t('book.loading')}})</span>
         </div>
       </div>
@@ -34,11 +34,47 @@
 </template>
 
 <script>
+import { ebookMixin } from '../../utils/mixin'
 export default {
+  mixins: [ebookMixin],
   data () {
     return {
-    };
+    }
   },
+  methods: {
+    onProgressChange (progress) {
+      this.setProgress(progress).then(() => {
+        this.displayProgress()
+        this.updateProgressBg()
+      })
+    },
+    displayProgress () {
+      const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 100)
+      this.currentBook.rendition.display(cfi)
+    },
+    onProgressInput (progress) {
+      this.setProgress(progress).then(() => {
+        this.displayProgress()
+        this.updateProgressBg()
+      })
+    },
+    /* 更新进度条背景 */
+    updateProgressBg () {
+      this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
+    },
+    nextSection () {
+
+    },
+    prevSection () {
+
+    },
+    getReadTime () {
+
+    }
+  },
+  updated () {
+    this.updateProgressBg()
+  }
 }
 
 </script>
@@ -76,8 +112,8 @@ export default {
           width: 100%;
           -webkit-appearance: none;
           height: px2rem(2);
-          background: -webkit-linear-gradient(#5d6268, #5d6268) no-repeat, #b4b5b7;
-          background-size: 0 100%;
+          // background: -webkit-linear-gradient(#5d6268, #5d6268) no-repeat, #b4b5b7;
+          // background-size: 0 100%;
           margin: 0 px2rem(10);
           &:focus {
             outline: none;
