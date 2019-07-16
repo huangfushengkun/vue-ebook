@@ -79,8 +79,16 @@ export default {
     displaySection () {
       const sectionInfo =  this.currentBook.section(this.section)
       if (sectionInfo && sectionInfo.href) {
-        this.currentBook.rendition.display(sectionInfo.href)
+        this.currentBook.rendition.display(sectionInfo.href).then(() => {
+          this.refreshLocation()
+        })
       }
+    },
+    refreshLocation () {
+      const currentLocation = this.currentBook.rendition.currentLocation()
+      const progress = this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)
+      console.log(progress)
+      this.setProgress(Math.floor(progress * 100))
     },
     getReadTime () {
 
