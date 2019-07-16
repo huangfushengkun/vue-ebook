@@ -12,20 +12,20 @@
             <span class="icon-back"></span>
           </div>
           <input class="progress" type="range"
-                 max="100"
-                 min="0"
-                 step="1"
-                 @input="onProgressInput($event.target.value)"
-                 @change="onProgressChange($event.target.value)"
-                 :value="progress"
-                 :disabled="!bookAvailable"
-                 ref="progress">
+                max="100"
+                min="0"
+                step="1"
+                @input="onProgressInput($event.target.value)"
+                @change="onProgressChange($event.target.value)"
+                :value="progress"
+                :disabled="!bookAvailable"
+                ref="progress">
           <div class="progress-icon-wrapper" @click="nextSection()">
             <span class="icon-forward"></span>
           </div>
         </div>
         <div class="text-wrapper">
-          <!-- <span class="progress-section-text">{{getSectionName}}</span> -->
+          <span class="progress-section-text">{{getSectionName}}</span>
           <span class="progress-text">({{bookAvailable ? progress + '%' : $t('book.loading')}})</span>
         </div>
       </div>
@@ -35,10 +35,17 @@
 
 <script>
 import { ebookMixin } from '../../utils/mixin'
+// import { saveLocation } from '../../utils/localStorage'
 export default {
   mixins: [ebookMixin],
-  data () {
-    return {
+  computed: {
+    getSectionName () {
+      if (this.section) {
+        const sectionInfo = this.currentBook.section(this.section)
+        if (sectionInfo && sectionInfo.href) {
+          return this.currentBook.navigation.get(sectionInfo.href).label
+        }
+      }
     }
   },
   methods: {
@@ -50,7 +57,10 @@ export default {
     },
     displayProgress () {
       const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 100)
-      this.currentBook.rendition.display(cfi)
+      this.display(cfi)
+      // this.currentBook.rendition.display(cfi).then(() => {
+      //   this.refreshLocation()
+      // })
     },
     onProgressInput (progress) {
       this.setProgress(progress).then(() => {
@@ -79,16 +89,11 @@ export default {
     displaySection () {
       const sectionInfo =  this.currentBook.section(this.section)
       if (sectionInfo && sectionInfo.href) {
-        this.currentBook.rendition.display(sectionInfo.href).then(() => {
-          this.refreshLocation()
-        })
+        this.display(sectionInfo.href)
+        // this.currentBook.rendition.display(sectionInfo.href).then(() => {
+        //   this.refreshLocation()
+        // })
       }
-    },
-    refreshLocation () {
-      const currentLocation = this.currentBook.rendition.currentLocation()
-      const progress = this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)
-      console.log(progress)
-      this.setProgress(Math.floor(progress * 100))
     },
     getReadTime () {
 

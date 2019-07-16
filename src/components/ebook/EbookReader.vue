@@ -16,7 +16,8 @@ import {
   getFontSize,
   saveFontSize,
   getTheme,
-  saveTheme
+  saveTheme,
+  getLocation
 } from '../../utils/localStorage'
 global.ePub = Epub
 export default {
@@ -26,11 +27,15 @@ export default {
   mixins: [ebookMixin],
   methods: {
     prevPage () {
-      this.rendition && this.rendition.prev()
+      this.rendition && this.rendition.prev().then(() => {
+        this.refreshLocation()
+      })
       this.hideTitleAndMenu()
     },
     nextPage () {
-      this.rendition && this.rendition.next()
+      this.rendition && this.rendition.next().then(() => {
+        this.refreshLocation()
+      })
       this.hideTitleAndMenu()
     },
     /* 切换头部和菜单 */
@@ -87,11 +92,13 @@ export default {
         height: innerHeight,
         method: 'default'
       })
-      this.rendition.display().then(() => {
+      const location = getLocation(this.fileName)
+      this.display(location, () => {
         this.initTheme()
         this.initFontSize()
         this.initFontFamily()
         this.initGlobalStyle()
+        this.refreshLocation()
       })
       this.rendition.hooks.content.register(contents => {
         Promise.all([
@@ -138,10 +145,12 @@ export default {
       this.setCurrentBook(this.book)
       this.initRendition()
       this.initGesture()
-      this.book.ready.then(() => {
+      this.book.ready.then(() => {  //分页
         return this.book.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16))
       }).then(locations => {
+        /* 分页完成后调用 */
         this.setBookAvailable(true)
+        this.refreshLocation()
       })
     }
   },
