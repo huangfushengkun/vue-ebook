@@ -45,13 +45,7 @@ export default {
       this.setMenuVisible(!this.menuVisible)
       this.setFontFamilyVisible(false)
     },
-    /* 隐藏头部和菜单 */
-    hideTitleAndMenu () {
-      // this.$store.dispatch('setMenuVisible', false)
-      this.setMenuVisible(false)
-      this.setSettingVisible(-1)
-      this.setFontFamilyVisible(false)
-    },
+
     /* 字号初始化 */
     initFontSize () {
       let fontSize = getFontSize(this.fileName)
